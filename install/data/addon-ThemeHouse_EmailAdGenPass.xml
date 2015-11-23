@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<addon addon_id="ThemeHouse_EmailAdGenPass" title="[⌂] Email Admin-Generated Password" version_string="1.0.0" version_id="1447261019" url="http://xf.themehouse.io/" install_callback_class="ThemeHouse_Install" install_callback_method="install" uninstall_callback_class="ThemeHouse_Install" uninstall_callback_method="uninstall">
+  <admin_navigation/>
+  <admin_permissions/>
+  <admin_style_properties/>
+  <admin_templates/>
+  <admin_template_modifications/>
+  <code_events/>
+  <code_event_listeners>
+    <listener event_id="controller_pre_dispatch" execute_order="10" callback_class="ThemeHouse_Listener_ControllerPreDispatch" callback_method="controllerPreDispatch" active="1" hint="" description=""/>
+    <listener event_id="file_health_check" execute_order="10" callback_class="ThemeHouse_EmailAdGenPass_Listener_FileHealthCheck" callback_method="fileHealthCheck" active="1" hint="" description=""/>
+    <listener event_id="init_dependencies" execute_order="10" callback_class="ThemeHouse_Listener_InitDependencies" callback_method="initDependencies" active="1" hint="" description=""/>
+    <listener event_id="load_class" execute_order="10" callback_class="ThemeHouse_EmailAdGenPass_Listener_LoadClass" callback_method="loadClassDataWriter" active="0" hint="XenForo_DataWriter_User" description="XenForo_DataWriter_User (For XenForo 1.2 and above)" compatibility_switch="1"/>
+    <listener event_id="load_class_datawriter" execute_order="10" callback_class="ThemeHouse_EmailAdGenPass_Listener_LoadClass" callback_method="loadClassDataWriter" active="1" hint="" description="(For XenForo 1.1 and below)" compatibility_switch="1"/>
+  </code_event_listeners>
+  <cron/>
+  <email_templates>
+    <template title="th_user_password_emailadgenpass">
+      <subject><![CDATA[{xen:phrase th_user_password_subject_emailadgenpass, "boardTitle={$boardTitle}"}]]></subject>
+      <body_text><![CDATA[{xen:phrase th_user_password_body_text_emailadgenpass,
+	"username={$user.username}",
+	"board_title={$boardTitle}",
+	"board_url={$boardUrl}",
+	"password={$password}"
+}]]></body_text>
+      <body_html><![CDATA[<p style="margin-top: 0">{xen:phrase th_user_password_body_html_emailadgenpass,
+	'username={$user.username}',
+	'board=<a href="{xen:link canonical:index}" style="color: #176093; text-decoration: none">{$xenOptions.boardTitle}</a>'}</p>
+
+<p>{xen:phrase user_name}: <b>{$user.username}</b>,<br />
+{xen:phrase password}:</p>
+
+<h2 style="font-size: 18pt; font-weight: normal; margin: 10px 0">{$password}</h2>
+
+<p><a href="{xen:link canonical:index}" style="color: #176093">{xen:phrase log_in}</a></p>
+
+<p>{xen:phrase thanks}<br />
+{$xenOptions.boardTitle}</p>]]></body_html>
+    </template>
+  </email_templates>
+  <email_template_modifications/>
+  <optiongroups>
+    <group group_id="th_emailAdGenPass" display_order="2000" debug_only="0"/>
+    <option option_id="th_emailAdGenPass_existingUsers" edit_format="onoff" data_type="boolean" can_backup="1">
+      <default_value>1</default_value>
+      <edit_format_params/>
+      <sub_options/>
+      <relation group_id="th_emailAdGenPass" display_order="10"/>
+    </option>
+    <option option_id="th_emailAdGenPass_newUsers" edit_format="onoff" data_type="boolean" can_backup="1">
+      <default_value>1</default_value>
+      <edit_format_params/>
+      <sub_options/>
+      <relation group_id="th_emailAdGenPass" display_order="1"/>
+    </option>
+  </optiongroups>
+  <permissions>
+    <permission_groups/>
+    <permissions/>
+    <interface_groups/>
+  </permissions>
+  <phrases>
+    <phrase title="option_group_th_emailAdGenPass" version_id="1421922457" version_string="1.0.0"><![CDATA[Email Admin-Generated Password by ThemeHouse]]></phrase>
+    <phrase title="option_group_th_emailAdGenPass_description" version_id="1421922457" version_string="1.0.0"><![CDATA[Options for the Email Admin-Generated Password by ThemeHouse add-on.]]></phrase>
+    <phrase title="option_th_emailAdGenPass_existingUsers" version_id="1421922457" version_string="1.0.0"><![CDATA[Email password for existing users]]></phrase>
+    <phrase title="option_th_emailAdGenPass_existingUsers_explain" version_id="1421922457" version_string="1.0.0"><![CDATA[If enabled, this will send an email to users edited in the admin control panel with their new password.]]></phrase>
+    <phrase title="option_th_emailAdGenPass_newUsers" version_id="1421922457" version_string="1.0.0"><![CDATA[Email password for new users]]></phrase>
+    <phrase title="option_th_emailAdGenPass_newUsers_explain" version_id="1421922457" version_string="1.0.0"><![CDATA[If enabled, this will send an email to users created in the admin control panel with their new password.]]></phrase>
+    <phrase title="th_user_password_body_html_emailadgenpass" version_id="1421922457" version_string="1.0.0"><![CDATA[{username}, you may now log in to {board} using the password listed below.]]></phrase>
+    <phrase title="th_user_password_body_text_emailadgenpass" version_id="1421922457" version_string="1.0.0"><![CDATA[{username},
+
+You may now log in to {board_title} using the password listed below.
+
+User Name: {username}
+New Password: {password}
+
+You may log in here:
+{board_url}
+
+Thanks,
+{board_title}]]></phrase>
+    <phrase title="th_user_password_subject_emailadgenpass" version_id="1421922457" version_string="1.0.0"><![CDATA[{boardTitle} Password]]></phrase>
+  </phrases>
+  <route_prefixes/>
+  <style_properties/>
+  <templates/>
+  <public_template_modifications>
+    <modification template="footer" modification_key="th_copyrightNotice_emailAdGenPass" description="Copyright notice for [⌂] Email Admin-Generated Password" execution_order="1" enabled="1" action="callback">
+      <find><![CDATA[/{xen:phrase (?:xenforo|extra)_copyright}/]]></find>
+      <replace><![CDATA[ThemeHouse_Listener_InitDependencies::copyrightNotice]]></replace>
+    </modification>
+  </public_template_modifications>
+  <bb_code_media_sites/>
+  <bb_codes/>
+</addon>
